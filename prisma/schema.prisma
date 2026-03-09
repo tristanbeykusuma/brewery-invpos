@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  products    Product[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Product {
+  id          String     @id @default(cuid())
+  name        String
+  sku         String     @unique
+  description String?
+  price       Float
+  cost        Float
+  categoryId  String
+  category    Category   @relation(fields: [categoryId], references: [id])
+  imageUrl    String?
+  inventory   Inventory?
+  saleItems   SaleItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Inventory {
+  id               String   @id @default(cuid())
+  productId        String   @unique
+  product          Product  @relation(fields: [productId], references: [id])
+  quantity         Int      @default(0)
+  lowStockThreshold Int     @default(10)
+  lastRestocked    DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Transaction {
+  id              String     @id @default(cuid())
+  transactionNumber String   @unique
+  tableNumber      String?   // For Beer Bar table number assignment
+  status          String     @default("completed") // completed, cancelled, refunded
+  sales           Sale[]
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Sale {
+  id            String     @id @default(cuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  totalAmount   Float
+  paymentMethod String     // cash, card, digital
+  cashierName   String
+  saleItems     SaleItem[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model SaleItem {
+  id        String  @id @default(cuid())
+  saleId    String
+  sale      Sale    @relation(fields: [saleId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Float
+  subtotal  Float
+}
