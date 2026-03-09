@@ -1,6 +1,6 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# 🚀 Brewery Inventory & POS System
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+A modern, production-ready Point-of-Sales and Inventory Management System built with cutting-edge technologies.
 
 ## ✨ Technology Stack
 
@@ -41,7 +41,7 @@ This scaffold provides a robust foundation built with:
 - **📅 Date-fns** - Modern JavaScript date utility library
 - **🪝 ReactUse** - Collection of essential React hooks for modern development
 
-## 🎯 Why This Scaffold?
+## 🎯 Why This System?
 
 - **🏎️ Fast Development** - Pre-configured tooling and best practices
 - **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
@@ -52,37 +52,55 @@ This scaffold provides a robust foundation built with:
 - **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
 - **🌍 i18n Ready** - Multi-language support with Next Intl
 - **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
 
 ## 🚀 Quick Start
 
 ```bash
 # Install dependencies
-bun install
+npm install
 
 # Start development server
-bun run dev
+npm run dev
 
 # Build for production
-bun run build
+npm run build
 
 # Start production server
-bun start
+npm start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to see your application running.
 
-## 🤖 Powered by Z.ai
+## 📦 Database Setup
 
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
+```bash
+# Generate Prisma Client
+npx prisma generate
 
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
+# Push schema to database
+npx prisma db push
 
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
+# Seed database with sample data
+curl -X POST http://localhost:3000/api/seed
+
+# Or visit http://localhost:3000 and click "Seed Demo Data"
+```
+
+## 🗄️ Database Management
+
+```bash
+# Open Prisma Studio (database GUI)
+npx prisma studio
+
+# Create a new migration
+npx prisma migrate dev --name migration_name
+
+# Deploy migrations to production
+npx prisma migrate deploy
+
+# Reset database (WARNING: deletes all data)
+npx prisma db push --force-reset
+```
 
 ## 📁 Project Structure
 
@@ -129,13 +147,47 @@ This scaffold includes a comprehensive set of modern web development tools:
 - **Type Safety**: End-to-end TypeScript with Zod validation
 - **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
 
-## 🤝 Get Started with Z.ai
+## 🚀 Deployment
 
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import project in Vercel dashboard
+3. Add `DATABASE_URL` environment variable
+4. Deploy automatically
+
+### Environment Variables
+
+Required for production:
+- `DATABASE_URL` - PostgreSQL connection string
+- `POSTGRES_PRISMA_URL` - Same as DATABASE_URL (for Prisma)
+
+## 📊 Features
+
+### Dashboard
+- Real-time sales statistics
+- Revenue tracking
+- Top products overview
+- Recent transactions summary
+
+### POS Terminal
+- Product catalog with categories
+- Shopping cart functionality
+- Multiple payment methods (cash, card, digital)
+- Automatic inventory updates
+
+### Inventory Management
+- Product CRUD operations
+- Stock level tracking
+- Low stock alerts
+- Purchase order management
+
+### Transaction History
+- Complete transaction records
+- Searchable history
+- Detailed transaction details
+- Export functionality
 
 ---
 
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+Built with ❤️ for breweries and small businesses.
