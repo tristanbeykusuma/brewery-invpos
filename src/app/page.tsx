@@ -18,6 +18,7 @@ import { InventoryManagement } from '@/components/inventory-management';
 import { Dashboard } from '@/components/dashboard';
 import { TransactionHistory } from '@/components/transaction-history';
 import { PurchaseOrder } from '@/components/purchase-order';
+import { CurrencyToggle } from '@/components/currency-toggle';
 import type { Product, Category } from '@/types';
 
 export default function Home() {
@@ -166,6 +167,8 @@ export default function Home() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {/* Currency Toggle */}
+            <CurrencyToggle />
             {/* Low stock indicator */}
             {products.filter(
               (p) =>

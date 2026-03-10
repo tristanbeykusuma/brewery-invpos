@@ -37,6 +37,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Product, Category, CartItem, PaymentMethod } from '@/types';
+import { useCurrency } from '@/contexts/currency-context';
 
 interface POSTerminalProps {
   products: Product[];
@@ -45,6 +46,7 @@ interface POSTerminalProps {
 }
 
 export function POSTerminal({ products, categories, onSaleComplete }: POSTerminalProps) {
+  const { formatCurrency } = useCurrency();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -55,6 +57,7 @@ export function POSTerminal({ products, categories, onSaleComplete }: POSTermina
   const [isProcessing, setIsProcessing] = useState(false);
   const [receiptData, setReceiptData] = useState<SaleWithTransaction | null>(null);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   interface SaleWithTransaction {
     id: string;
@@ -308,7 +311,7 @@ export function POSTerminal({ products, categories, onSaleComplete }: POSTermina
                     <p className="text-xs text-muted-foreground">{product.sku}</p>
                     <div className="flex justify-between items-center mt-1">
                       <span className="font-bold text-primary">
-                        ${product.price.toFixed(2)}
+                        {formatCurrency(product.price)}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         Stock: {stock}
@@ -336,8 +339,8 @@ export function POSTerminal({ products, categories, onSaleComplete }: POSTermina
               </Button>
             )}
           </div>
-        </CardHeader>
-        <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
+         </CardHeader>
+        <CardContent className="flex-1 flex flex-col gap-4">
           <ScrollArea className="flex-1 h-[calc(100vh-280px)]">
             <div className="px-6">
               {cart.length === 0 ? (
@@ -374,7 +377,7 @@ export function POSTerminal({ products, categories, onSaleComplete }: POSTermina
                               {item.product.name}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              ${item.product.price.toFixed(2)} each
+                              {formatCurrency(item.product.price)} each
                             </p>
                           </div>
                         </div>
@@ -428,7 +431,7 @@ export function POSTerminal({ products, categories, onSaleComplete }: POSTermina
             <div className="flex justify-between font-bold text-lg">
               <span>Total</span>
               <span className="text-primary">
-                ${cartTotals.subtotal.toFixed(2)}
+                {formatCurrency(cartTotals.subtotal)}
               </span>
             </div>
           </div>
@@ -467,14 +470,14 @@ export function POSTerminal({ products, categories, onSaleComplete }: POSTermina
                     <span>
                       {item.quantity}x {item.product.name}
                     </span>
-                    <span>${(item.product.price * item.quantity).toFixed(2)}</span>
+                    <span>{formatCurrency(item.product.price * item.quantity)}</span>
                   </div>
                 ))}
               </ScrollArea>
               <Separator className="my-2" />
               <div className="flex justify-between font-bold">
                 <span>Total</span>
-                <span>${cartTotals.subtotal.toFixed(2)}</span>
+                <span>{formatCurrency(cartTotals.subtotal)}</span>
               </div>
             </div>
 
@@ -576,7 +579,7 @@ export function POSTerminal({ products, categories, onSaleComplete }: POSTermina
                     <span>
                       {item.quantity}x {item.product?.name}
                     </span>
-                    <span>${item.subtotal.toFixed(2)}</span>
+                    <span>{formatCurrency(item.subtotal)}</span>
                   </div>
                 ))}
               </div>
@@ -585,7 +588,7 @@ export function POSTerminal({ products, categories, onSaleComplete }: POSTermina
 
               <div className="flex justify-between font-bold text-lg mt-2">
                 <span>TOTAL</span>
-                <span>${receiptData.totalAmount.toFixed(2)}</span>
+                <span>{formatCurrency(receiptData.totalAmount)}</span>
               </div>
 
               <div className="text-center mt-4 text-xs text-gray-500">

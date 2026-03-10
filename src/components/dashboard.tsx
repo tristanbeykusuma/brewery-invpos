@@ -27,12 +27,14 @@ import {
   Bar,
 } from 'recharts';
 import type { DashboardStats } from '@/types';
+import { useCurrency } from '@/contexts/currency-context';
 
 interface DashboardProps {
   onRefresh: () => void;
 }
 
 export function Dashboard({ onRefresh }: DashboardProps) {
+  const { formatCurrency } = useCurrency();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -52,13 +54,6 @@ export function Dashboard({ onRefresh }: DashboardProps) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(value);
   };
 
   const formatDate = (date: Date | string) => {
@@ -187,7 +182,7 @@ export function Dashboard({ onRefresh }: DashboardProps) {
                     className="text-xs"
                   />
                   <YAxis
-                    tickFormatter={(value) => `$${value}`}
+                    tickFormatter={(value) => formatCurrency(value)}
                     className="text-xs"
                   />
                   <Tooltip
@@ -217,7 +212,7 @@ export function Dashboard({ onRefresh }: DashboardProps) {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.topProducts} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                  <XAxis type="number" tickFormatter={(v) => `$${v}`} />
+                  <XAxis type="number" tickFormatter={(v) => formatCurrency(v)} />
                   <YAxis
                     dataKey="productName"
                     type="category"

@@ -54,6 +54,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Product, Category, ProductWithInventory } from '@/types';
+import { useCurrency } from '@/contexts/currency-context';
 
 interface InventoryManagementProps {
   products: Product[];
@@ -68,6 +69,7 @@ export function InventoryManagement({
   onDataChange,
   onOpenPurchaseOrder,
 }: InventoryManagementProps) {
+  const { formatCurrency } = useCurrency();
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [stockFilter, setStockFilter] = useState<string>('all');
@@ -423,10 +425,10 @@ export function InventoryManagement({
                           )}
                         </TableCell>
                         <TableCell className="text-right">
-                          ${product.price.toFixed(2)}
+                          {formatCurrency(product.price)}
                         </TableCell>
                         <TableCell className="text-right">
-                          ${product.cost.toFixed(2)}
+                          {formatCurrency(product.cost)}
                         </TableCell>
                         <TableCell className="text-center">
                           <span

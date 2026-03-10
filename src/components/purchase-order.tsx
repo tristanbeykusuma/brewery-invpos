@@ -42,6 +42,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Product, Category } from '@/types';
+import { useCurrency } from '@/contexts/currency-context';
 
 interface PurchaseOrderItem {
   product: Product;
@@ -58,6 +59,7 @@ interface PurchaseOrderProps {
 }
 
 export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, onClose }: PurchaseOrderProps) {
+  const { formatCurrency } = useCurrency();
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
   
@@ -233,12 +235,12 @@ export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, 
 
     items.forEach((item) => {
       emailBody += `${item.quantity}x ${item.product.name} (${item.product.sku})\n`;
-      emailBody += `  Cost: $${item.cost.toFixed(2)} | Subtotal: $${item.subtotal.toFixed(2)}\n`;
+      emailBody += `  Cost: ${formatCurrency(item.cost)} | Subtotal: ${formatCurrency(item.subtotal)}\n`;
     });
 
     emailBody += `\n--------------------------------\n`;
     emailBody += `Total Items: ${orderTotals.itemCount}\n`;
-    emailBody += `TOTAL: $${orderTotals.total.toFixed(2)}\n\n`;
+    emailBody += `TOTAL: ${formatCurrency(orderTotals.total)}\n\n`;
 
     if (orderNotes) {
       emailBody += `NOTES:\n${orderNotes}\n\n`;
@@ -281,12 +283,12 @@ export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, 
 
     purchaseOrderData.items.forEach((item) => {
       emailBody += `${item.quantity}x ${item.product.name} (${item.product.sku})\n`;
-      emailBody += `  Cost: $${item.cost.toFixed(2)} | Subtotal: $${item.subtotal.toFixed(2)}\n`;
+      emailBody += `  Cost: ${formatCurrency(item.cost)} | Subtotal: ${formatCurrency(item.subtotal)}\n`;
     });
 
     emailBody += `\n--------------------------------\n`;
     emailBody += `Total Items: ${purchaseOrderData.itemCount}\n`;
-    emailBody += `TOTAL: $${purchaseOrderData.total.toFixed(2)}\n\n`;
+    emailBody += `TOTAL: ${formatCurrency(purchaseOrderData.total)}\n\n`;
 
     if (purchaseOrderData.notes) {
       emailBody += `NOTES:\n${purchaseOrderData.notes}\n\n`;
@@ -388,7 +390,7 @@ export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, 
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <div className="font-bold">${product.cost.toFixed(2)}</div>
+                            <div className="font-bold">{formatCurrency(product.cost)}</div>
                             <div className="text-xs text-muted-foreground">
                               {categories.find(cat => cat.id === product.categoryId)?.name}
                             </div>
@@ -438,7 +440,7 @@ export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, 
                           <TableCell>
                             {categories.find(cat => cat.id === item.product.categoryId)?.name || 'N/A'}
                           </TableCell>
-                          <TableCell className="text-right">${item.cost.toFixed(2)}</TableCell>
+                          <TableCell className="text-right">{formatCurrency(item.cost)}</TableCell>
                           <TableCell className="text-center">
                             <div className="flex items-center justify-center gap-1">
                               <Button
@@ -461,7 +463,7 @@ export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, 
                             </div>
                           </TableCell>
                           <TableCell className="text-right font-medium">
-                            ${item.subtotal.toFixed(2)}
+                            {formatCurrency(item.subtotal)}
                           </TableCell>
                           <TableCell>
                             <Button
@@ -491,7 +493,7 @@ export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, 
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Order Total:</span>
-                    <span className="font-bold text-lg">$${orderTotals.total.toFixed(2)}</span>
+                    <span className="font-bold text-lg">{formatCurrency(orderTotals.total)}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -569,7 +571,7 @@ export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, 
                     <span>
                       {item.quantity}x {item.product.name}
                     </span>
-                    <span>${item.subtotal.toFixed(2)}</span>
+                    <span>{formatCurrency(item.subtotal)}</span>
                   </div>
                 ))}
               </div>
@@ -582,7 +584,7 @@ export function PurchaseOrder({ products, categories, isOpen: controlledIsOpen, 
               </div>
               <div className="flex justify-between font-bold text-lg mt-1">
                 <span>TOTAL</span>
-                <span>${purchaseOrderData.total.toFixed(2)}</span>
+                <span>{formatCurrency(purchaseOrderData.total)}</span>
               </div>
 
               {purchaseOrderData.notes && (

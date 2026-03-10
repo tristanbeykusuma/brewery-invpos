@@ -202,6 +202,9 @@ export async function POST(request: NextRequest) {
       }
 
       return sale;
+    }, {
+      maxWait: 10000,
+      timeout: 10000,
     });
 
     return NextResponse.json(result, { status: 201 });

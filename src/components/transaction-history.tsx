@@ -50,12 +50,14 @@ import {
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import type { SaleWithDetails } from '@/types';
+import { useCurrency } from '@/contexts/currency-context';
 
 interface TransactionHistoryProps {
   onRefresh: () => void;
 }
 
 export function TransactionHistory({ onRefresh }: TransactionHistoryProps) {
+  const { formatCurrency } = useCurrency();
   const [sales, setSales] = useState<SaleWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -113,13 +115,6 @@ export function TransactionHistory({ onRefresh }: TransactionHistoryProps) {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(value);
-  };
 
   const formatDateTime = (date: Date | string) => {
     return new Date(date).toLocaleString('en-US', {
